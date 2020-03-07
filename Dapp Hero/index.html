@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello!</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <div>
+      <h1>
+        Payments Portal
+      </h1>
+      
+      <div>
+      
+        Network ID: 
+        
+        <h2
+          style="margin-bottom: 25px"
+          data-dh-feature="network"
+          data-dh-property-id
+        >Metamask</h2>
+
+        
+        Network Name:
+        
+          <h2
+            style="margin-bottom: 25px"
+            data-dh-feature="network"
+            data-dh-property-name
+          >Ropsten Test Network</h2>
+
+        Network Provider: 
+        
+          <h2
+            style="margin-bottom: 25px"
+            data-dh-feature="network"
+            data-dh-property-provider
+          >Metamask</h2>
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        Enable Button: 
+        
+        <button
+          class="pay-button" style="margin-top: 25px"
+          data-dh-feature="network"
+          data-dh-property-enable >Enable </button>
+    
+        <div id="status"></div>
+        
+        
+      </div>
+    </div>
+
+    <script
+      src="https://package.dapphero.io/main.js"
+      id="dh-apiKey"
+      data-api="1580767497772x353394266303889400"
+    ></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+  
+    window.addEventListener('load', async () => {
+      if (window.ethereum) {
+        window.web3 = new Web3(ethereum);
+        try {
+          await ethereum.enable();
+          initPayButton()
+        } catch (err) {
+          $('#status').html('User denied account access', err)
+        }
+      } else if (window.web3) {
+        window.web3 = new Web3(web3.currentProvider)
+        initPayButton()
+      } else {
+        $('#status').html('No Metamask (or other Web3 Provider) installed')
+      }
+    })
+
+    const initPayButton = () => {
+      $('.pay-button').click(() => {
+        // paymentAddress is where funds will be send to
+        const paymentAddress = '0x192c96bfee59158441f26101b2db1af3b07feb40'
+        const amountEth = 0.000001
+
+        web3.eth.sendTransaction({
+          to: paymentAddress,
+          value: web3.toWei(amountEth, 'ether')
+        }, (err, transactionId) => {
+          if  (err) {
+            console.log('Payment failed', err)
+            $('#status').html('Payment failed')
+          } else {
+            console.log('Payment successful', transactionId)
+            $('#status').html('Payment successful')
+          }
+        })
+      })
+    }
+  </script>
+
+
+</body>
+</html>
